@@ -8,7 +8,8 @@ headers = {
     "user-agent": user_agent
 }
 
-os.mkdir("pttmovie")
+if not os.path.exists("pttmovie"):
+    os.mkdir("pttmovie")
 
 for i in range(0, 5):
     res = requests.get(url, headers=headers)
@@ -27,6 +28,21 @@ for i in range(0, 5):
         article_soup = BeautifulSoup(article_res.text, "html.parser")
         article_tag_obj = article_soup.select_one('div[id="main-content"]')
         article_content = article_tag_obj.text.split("※ 發信站:")[0]
+
+        word_list = ['/', '?']
+        for w in word_list:
+            if w in title_name:
+                title_name = title_name.replace(w, '')
+        try:
+            with open("pttmovie/{}.txt".format(title_name), 'w', encoding='utf-8') as f:
+                f.write(article_content)
+        except FileNotFoundError as e:
+            # print(e.args)
+            # print("pttmovie/{}.txt".format(title_name.replace('/', '-')))
+            with open("pttmovie/{}.txt".format(title_name.replace('/', '-')), 'w', encoding='utf-8') as f:
+                f.write(article_content)
+        except OSError:
+            pass
 
         print(title_name)
         print(article_url)
