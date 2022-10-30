@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import poker as p
 
 app = Flask(
@@ -14,10 +14,18 @@ def hello():
     return "<h1>Hello Flask!</h1>"
 
 
+# @app.route("/hello/<username>")
+# def hello_user(username):
+#     output = "<h2>Hello {} !!!!!!!!!!!!</h2>"
+#     return output.format(username)
+
+
 @app.route("/hello/<username>")
 def hello_user(username):
-    output = "<h2>Hello {} !!!!!!!!!!!!</h2>"
-    return output.format(username)
+    return render_template(
+        "hello.html",
+        username=username
+    )
 
 
 @app.route("/addTwoNum/<x>/<y>")
