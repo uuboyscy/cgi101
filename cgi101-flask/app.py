@@ -34,17 +34,27 @@ def addTwoNum(x, y):
 
 
 # /hello_get?name=Allen&age=22
+# @app.route("/hello_get")
+# def hello_get():
+#     name = request.args.get("name")
+#     age = request.args.get("age")
+#     if name == None:
+#         return "What's your name?"
+#     elif age == None:
+#         return "Hello {} !".format(name)
+#     else:
+#         output = "Hello {}, you are {} years old."
+#         return output.format(name, age)
+
 @app.route("/hello_get")
 def hello_get():
     name = request.args.get("name")
     age = request.args.get("age")
-    if name == None:
-        return "What's your name?"
-    elif age == None:
-        return "Hello {} !".format(name)
-    else:
-        output = "Hello {}, you are {} years old."
-        return output.format(name, age)
+    return render_template(
+        "hello_get.html",
+        name=name,
+        age=age
+    )
 
 
 @app.route("/hello_post", methods=["GET", "POST"])
