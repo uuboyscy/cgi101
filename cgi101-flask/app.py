@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import poker as p
+import model
 
 app = Flask(
     __name__,
@@ -78,11 +79,39 @@ def hello_post():
     return output
 
 # /poker?player=5
-@app.route("/poker")
+# @app.route("/poker")
+# def poker():
+#     player = int(request.args.get("player"))
+#     outputJson = p.poker(player)
+#     return jsonify(outputJson)
+
+
+@app.route('/poker', methods=['GET', 'POST'])
 def poker():
-    player = int(request.args.get("player"))
-    outputJson = p.poker(player)
-    return jsonify(outputJson)
+    request_method = request.method
+    players = 0
+    cards = dict()
+    if request_method == 'POST':
+        players = int(request.form.get('players'))
+        cards = p.poker(players)
+    return render_template('poker.html', request_method=request_method,
+                                         cards=cards)
+
+
+@app.route('/show_staff')
+def hello_google():
+    staff_data = model.getStaff()
+    column = ['ID', 'Name', 'DeptId', 'Age', 'Gender', 'Salary']
+    return render_template('show_staff.html', staff_data=staff_data,
+                                              column=column)
+
+
+@app.route('/show_staff/salaryGreaterThan/<s>')
+def hello_google_2(s):
+    staff_data = model.getStaff_salary(s)
+    column = ['ID', 'Name', 'DeptId', 'Age', 'Gender', 'Salary']
+    return render_template('show_staff.html', staff_data=staff_data,
+                                              column=column)
 
 
 if __name__ == '__main__':
