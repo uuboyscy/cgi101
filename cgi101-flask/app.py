@@ -1,7 +1,11 @@
 from flask import Flask, request, jsonify
 import poker as p
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path="/source",   # default /static
+    static_folder="./tmpfolder"  # default ./static
+)
 
 
 @app.route("/")
@@ -44,6 +48,7 @@ def hello_post():
         <input name="username">
         <button type="submit">Submit</button>
     </form>
+    <img src="/source/google.png">
     """
     method = request.method  # -> GET or POST string
     if method == "POST":
